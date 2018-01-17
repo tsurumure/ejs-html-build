@@ -1,0 +1,27 @@
+{
+  "name": "ejs-html-build",
+  "license": "Mure",
+  "author": "405348097@qq.com",
+  "scripts": {
+    "ejs:dev": "webpack-dev-server --open --config build/webpack.config.js",
+    "ejs:build": "cross-env NODE_ENV=production webpack --config build/webpack.config.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.2.5",
+    "clean-webpack-plugin": "^0.1.17",
+    "cross-env": "^5.1.3",
+    "css-hot-loader": "^1.3.5",
+    "css-loader": "^0.28.8",
+    "ejs-html-loader": "^3.1.0",
+    "ejs-render-loader": "^1.0.0",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.7.2",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^2.0.10",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.1",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.0"
+  }
+}
