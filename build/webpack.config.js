@@ -16,7 +16,7 @@ var exportsConfig = {
   output: {
     path: path.resolve(__dirname, Config.outputPath),	// 打包路径
     publicPath: '/',				// 打包公用路径
-    filename: '[name].js',				// 打包文件名
+    filename: '[name].[hash].js',				// 打包文件名
   },
   devtool: IS_PRODUCTION ? false : "#source-map",
   devServer:{
@@ -29,13 +29,7 @@ var exportsConfig = {
         use: ['css-hot-loader'].concat(ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
-						{
-							loader: 'css-loader',
-							query: {
-								modules: true, sourceMap: true, importLoaders: 2,
-								localIdentName: '[name]__[local]___[hash:base64:5]'
-							}
-						},
+						{ loader: 'css-loader' },
             {
               loader : 'sass-loader',
               options: {
@@ -55,17 +49,9 @@ var exportsConfig = {
 					]
         })),
       },
-      // {
-      //   test: /\.css$/, loader: ExtractTextPlugin.extract({
-      //     use: ["style-loader", "css-loader"]
-      //   })
-      // },
       {
-        test:/\.(png|jpg|gif|svg)$/,
-        loader:'file-loader',
-        options:{
-          name:'img/[name].[ext]'
-        }
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: "url-loader?limit=8192&name=assets/images/[name].[ext]"  // limit=8192&
       },
       {
         test: /\.ejs$/,
@@ -80,7 +66,7 @@ var exportsConfig = {
     // new webpack.DefinePlugin({
     //   PRODUCTION: IS_PRODUCTION ? JSON.stringify(process.env.NODE_ENV) : false
     // }),
-    new ExtractTextPlugin({ filename:"assets/" + (IS_PRODUCTION ? "style.[hash].css" : "style.css") }),
+    new ExtractTextPlugin({ filename:(IS_PRODUCTION ? "style.[hash].css" : "style.css") }), //"assets/" + 
     new HtmlWebpackPlugin({
       filename: 'index.html', inject: 'body',
       template: 'ejs-render-loader!./src/Public/index.ejs', //?ejs=工!
@@ -101,10 +87,17 @@ if(IS_PRODUCTION){
   exportsConfig.plugins.push( // 重置清空 ./dist
     new CleanWebpackPlugin([Config.outputPath],{
       root: __dirname, watch:true, allowExternal:true,
-      exclude: ['common.js'],  // (选填) 排除某个文件不删除
+      exclude: [],  // (选填) 排除某个文件不删除 //'common.js'
     })
   )
   exportsConfig.plugins.push(new OptimizeCssAssetsPlugin()) // CSS压缩
+  exportsConfig.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    }) 
+  ) // JS压缩
 }
 
 module.exports = exportsConfig;
