@@ -10,13 +10,16 @@ var Config = require('../src/config');
 var IS_PRODUCTION = (process.env.NODE_ENV=='production');
 
 var exportsConfig = {
-  entry: [
-    './src/Entry/index.js'
-  ],
+  entry: {
+    'index':'./src/Entry/index.js',
+    // 'vendor':[
+    //   './src/Public/assets/lib/jquery.min.js'
+    // ]
+  },
   output: {
     path: path.resolve(__dirname, Config.outputPath),	// 打包路径
     publicPath: '/',				// 打包公用路径
-    filename: '[name].[hash].js',				// 打包文件名
+    filename: '[name].[hash:4].js',				// 打包文件名
   },
   devtool: IS_PRODUCTION ? false : "#source-map",
   devServer:{
@@ -66,7 +69,7 @@ var exportsConfig = {
     // new webpack.DefinePlugin({
     //   PRODUCTION: IS_PRODUCTION ? JSON.stringify(process.env.NODE_ENV) : false
     // }),
-    new ExtractTextPlugin({ filename:(IS_PRODUCTION ? "style.[hash].css" : "style.css") }), //"assets/" + 
+    new ExtractTextPlugin({ filename:(IS_PRODUCTION ? "style.[hash:4].css" : "style.css") }), //"assets/" + 
     new HtmlWebpackPlugin({
       filename: 'index.html', inject: 'body',
       template: 'ejs-render-loader!./src/Public/index.ejs', //?ejs=工!
@@ -75,9 +78,11 @@ var exportsConfig = {
         minifyCSS:true, minifyJS:true, removeComments: true
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor', minChunks: Infinity,
-    }),
+
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   name: 'vendor', minChunks: Infinity,
+    // }),
+
     new webpack.HotModuleReplacementPlugin() // 热启动
   ],
 }

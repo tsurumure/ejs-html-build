@@ -8,7 +8,7 @@ if(module.hot){
   require('ejs-render-loader!../Public/footer.ejs');
 }
 
-// var $ = require('../Public/assets/jquery.min.js');
+// require("expose-loader?$!../Public/assets/lib/jquery.min.js");
 // $(document).ready(function(){
 //   alert('a')
 // });
